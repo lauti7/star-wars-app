@@ -1,7 +1,48 @@
 import React from 'react'
 import CharactersBodyTable from './CharactersBodyTable'
 
-const Characters = ({characters, getData, nextPage}) => {
+const Characters = ({characters, getData, nextPage, like, unlike, route}) => {
+  const checkRoute = () => {
+    const currentRoute = route
+
+    if (currentRoute === '/personajes') {
+      return (
+        characters.map(({id,name, gender, eye_color, height, mass, saved}, index) =>
+            <CharactersBodyTable
+              key={id}
+              id={id}
+              name={name}
+              gender={gender}
+              eye_color={eye_color}
+              height={height}
+              mass={mass}
+              like={like}
+              route={route}
+              saved={saved}
+            />
+        )
+      )
+    } else {
+      const filteredCharacters = characters.filter(character => character.saved === true);
+      return(
+        filteredCharacters.map(({id,name, gender, eye_color, height, mass, saved}, index) =>
+            <CharactersBodyTable
+              key={id}
+              id={id}
+              name={name}
+              gender={gender}
+              eye_color={eye_color}
+              height={height}
+              mass={mass}
+              like={like}
+              unlike={unlike}
+              route={route}
+              saved={saved}
+            />
+        )
+      )
+    }
+  }
   return (
     <div>
       <table className="table table-dark">
@@ -17,19 +58,7 @@ const Characters = ({characters, getData, nextPage}) => {
             </tr>
           </thead>
           <tbody className="tBody">
-            {
-              characters.map(({name, gender, eye_color, height, mass}, index) =>
-                  <CharactersBodyTable
-                    key={index}
-                    id={index}
-                    name={name}
-                    gender={gender}
-                    eye_color={eye_color}
-                    height={height}
-                    mass={mass}
-                  />
-              )
-            }
+            {checkRoute()}
           </tbody>
       </table>
       <div className="py-3">
