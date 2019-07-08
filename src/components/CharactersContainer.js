@@ -33,17 +33,34 @@ class CharactersContainer extends Component {
     if (get('characters')) {
       const characters = get('characters');
       const nextPage = localStorage.getItem('nextPage');
-      const counter = localStorage.getItem('counter');
+      const counter = Number(localStorage.getItem('counter'));
       this.setState({characters, nextPage, counter })
     } else {
       this.fetchAllCharacters(this.state.base_url)
     }
   }
 
+  like = event => {
+    const characterId = Number(event.target.parentNode.parentNode.id);
+    const characters = [...this.state.characters];
+    characters[characterId - 1].saved = true;
+    save('characters', characters);
+    this.setState({characters});
+  }
+
+  unlike = event => {
+    const characterId = Number(event.target.parentNode.parentNode.id);
+    console.log(characterId);
+    const characters = [...this.state.characters];
+    characters[characterId - 1].saved = false;
+    save('characters', characters);
+    this.setState({characters});
+  }
+
   render() {
     return (
-      <div>
-        <Characters characters={this.state.characters} getData={this.fetchAllCharacters} nextPage={this.state.nextPage}  />
+      <div className="container">
+        <Characters like={this.like} unlike={this.unlike} route={this.props.location.pathname} characters={this.state.characters} getData={this.fetchAllCharacters} nextPage={this.state.nextPage}  />
       </div>
     );
   }
